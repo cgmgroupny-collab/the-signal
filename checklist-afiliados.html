@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist - Cuentas de Afiliados | The Signal AI</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 13.5pt;
+      font-weight: 500;
+      line-height: 1.7;
+      color: #111;
+      background: #fff;
+      padding: 48px;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    @media print {
+      body { padding: 24px; font-size: 11.5pt; }
+      .no-print { display: none !important; }
+      .page-break { page-break-before: always; }
+      .section { page-break-inside: avoid; }
+    }
+
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #0B0F19;
+      color: #00D4AA;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 100;
+    }
+    .print-btn:hover { background: #1a2030; }
+
+    /* ===== BIG TITLE ===== */
+    .big-title {
+      background: #0B0F19;
+      color: #fff;
+      padding: 40px 36px;
+      border-radius: 16px;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .big-title .label {
+      display: inline-block;
+      background: #00D4AA;
+      color: #0B0F19;
+      padding: 5px 16px;
+      border-radius: 5px;
+      font-size: 10pt;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .big-title h1 {
+      font-size: 32pt;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .big-title h1 span { color: #00D4AA; }
+
+    .big-title p {
+      font-size: 13pt;
+      font-weight: 500;
+      color: #9A9DA6;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .big-title .date {
+      font-size: 10.5pt;
+      font-weight: 600;
+      color: #666;
+      margin-top: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ===== INFO BOX ===== */
+    .info-box {
+      background: #f7f7f5;
+      border: 2px solid #e4e4e0;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+    }
+
+    .info-box h3 {
+      font-size: 12pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #0B0F19;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #e0e0dc;
+    }
+
+    .info-row {
+      display: flex;
+      padding: 10px 0;
+      border-bottom: 1px dotted #ccc;
+      align-items: baseline;
+    }
+
+    .info-row:last-child { border-bottom: none; }
+
+    .info-label {
+      font-weight: 700;
+      min-width: 220px;
+      color: #222;
+      font-size: 12pt;
+    }
+
+    .info-value {
+      font-family: 'Courier New', monospace;
+      font-size: 12pt;
+      color: #0B0F19;
+      font-weight: 700;
+      word-break: break-all;
+    }
+
+    /* ===== ALERT BOXES ===== */
+    .alert {
+      padding: 20px 24px;
+      margin-bottom: 22px;
+      border-radius: 10px;
+      font-size: 12.5pt;
+      font-weight: 500;
+      line-height: 1.6;
+      border-left: 6px solid;
+    }
+
+    .alert strong { display: block; font-size: 13pt; font-weight: 800; margin-bottom: 5px; }
+
+    .alert.rojo { background: #FFF0F0; border-color: #E53935; }
+    .alert.rojo strong { color: #C62828; }
+
+    .alert.verde { background: #EEFBF4; border-color: #43A047; }
+    .alert.verde strong { color: #2E7D32; }
+
+    .alert.naranja { background: #FFF8EE; border-color: #FB8C00; }
+    .alert.naranja strong { color: #E65100; }
+
+    .alert.azul { background: #EEF4FF; border-color: #1E88E5; }
+    .alert.azul strong { color: #1565C0; }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      margin-bottom: 36px;
+    }
+
+    .section h2 {
+      font-size: 18pt;
+      font-weight: 800;
+      color: #0B0F19;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .step-num {
+      background: #0B0F19;
+      color: #00D4AA;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16pt;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .section-desc {
+      color: #555;
+      font-weight: 500;
+      margin-bottom: 18px;
+      font-size: 12pt;
+      padding-left: 50px;
+    }
+
+    /* ===== CHECKLIST ===== */
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 2px solid #e8e8e4;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: #fdfdfb;
+      line-height: 1.5;
+    }
+
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2.5px solid #0B0F19;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .task-text { flex: 1; font-size: 12pt; font-weight: 500; }
+    .task-text strong { color: #0B0F19; font-size: 13pt; font-weight: 800; }
+    .task-text .url { font-family: 'Courier New', monospace; font-size: 11pt; font-weight: 600; color: #1565C0; word-break: break-all; display: block; margin: 4px 0; }
+    .task-text .nota { font-size: 11pt; color: #666; font-weight: 500; margin-top: 4px; }
+    .task-text .pw { font-family: 'Courier New', monospace; font-size: 11pt; background: #f0f0ec; padding: 4px 10px; border-radius: 4px; font-weight: 700; }
+
+    /* ===== TABLE ===== */
+    .tabla {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-bottom: 18px;
+      font-size: 11.5pt;
+      font-weight: 500;
+      border: 2px solid #e4e4e0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .tabla th {
+      background: #0B0F19;
+      color: #00D4AA;
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 10pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .tabla td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #eee;
+      vertical-align: top;
+      font-weight: 500;
+    }
+
+    .tabla tr:nth-child(even) td { background: #fafaf8; }
+    .tabla tr:last-child td { border-bottom: none; }
+
+    .tabla td strong { font-weight: 800; font-size: 12pt; }
+
+    .tabla .mono {
+      font-family: 'Courier New', monospace;
+      font-size: 10.5pt;
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .prioridad {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 9pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .prioridad.alta { background: #DCFCE7; color: #166534; }
+    .prioridad.media { background: #FEF3C7; color: #92400E; }
+    .prioridad.baja { background: #F1F5F9; color: #64748B; }
+
+    hr {
+      border: none;
+      border-top: 2px dashed #e0e0dc;
+      margin: 32px 0;
+    }
+
+    .doc-footer {
+      text-align: center;
+      padding-top: 24px;
+      border-top: 3px solid #0B0F19;
+      margin-top: 40px;
+      font-size: 11pt;
+      font-weight: 600;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn no-print" onclick="window.print()">Imprimir / Guardar PDF</button>
+
+  <!-- ===== TITULO GRANDE ===== -->
+  <div class="big-title">
+    <span class="label">Documento Interno &bull; Confidencial</span>
+    <h1>Crear Cuentas de <span>Afiliados</span></h1>
+    <p>Guia paso a paso para abrir todas las cuentas de afiliados de The Signal AI.</p>
+    <p class="date">Febrero 2026</p>
+  </div>
+
+  <!-- ===== DATOS GENERALES ===== -->
+  <div class="info-box">
+    <h3>Usa estos datos en TODAS las cuentas</h3>
+    <div class="info-row">
+      <span class="info-label">Nombre de la cuenta:</span>
+      <span class="info-value">The Signal AI</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Email:</span>
+      <span class="info-value">beatsfreeflow@gmail.com</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Sitio web:</span>
+      <span class="info-value">https://thesignal.blog</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Instagram:</span>
+      <span class="info-value">@thesignalai</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">X (Twitter):</span>
+      <span class="info-value">@thesignalai</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">LinkedIn:</span>
+      <span class="info-value">linkedin.com/company/thesignalai</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Nombre del negocio:</span>
+      <span class="info-value">The Signal AI</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Username (cuando pidan):</span>
+      <span class="info-value">thesignalai</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Descripcion del sitio:</span>
+      <span class="info-value" style="font-family: Inter, sans-serif; font-weight: 600;">Blog de resenas independientes de herramientas de AI, crypto y apuestas deportivas.</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Descripcion en ingles:</span>
+      <span class="info-value" style="font-family: Inter, sans-serif; font-weight: 600;">Independent reviews of AI tools, crypto exchanges, and sports betting platforms.</span>
+    </div>
+  </div>
+
+  <!-- ===== ACCESO AL GMAIL ===== -->
+  <div class="info-box" style="border-color: #E53935; background: #FFF5F5;">
+    <h3 style="color: #C62828; border-bottom-color: #FFCDD2;">Acceso al Gmail (para verificar cuentas)</h3>
+    <div class="info-row">
+      <span class="info-label">Email:</span>
+      <span class="info-value">beatsfreeflow@gmail.com</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Contrasena del Gmail:</span>
+      <span class="info-value">Th3S1gnal!Stak#26</span>
+    </div>
+    <div class="info-row" style="border-bottom: none; padding-top: 12px;">
+      <span class="info-label" style="min-width: auto; color: #C62828; font-size: 11pt;">Necesitas entrar a este Gmail para confirmar los emails de verificacion de cada cuenta que crees.</span>
+    </div>
+  </div>
+
+  <!-- ===== ALERTAS PRINCIPALES ===== -->
+  <div class="alert rojo">
+    <strong>CONTRASENAS</strong>
+    Cada cuenta tiene una contrasena sugerida abajo. Usa esa contrasena exacta. Si el sitio no la acepta (por ejemplo, pide mas caracteres), agrega <strong>!2026</strong> al final y anota el cambio.
+  </div>
+
+  <div class="alert azul">
+    <strong>FOTO DE PERFIL / LOGO</strong>
+    Pedirle el archivo del logo directamente a <strong>Gerardo</strong>. El te lo envia cuando comiences. Subir ese logo como foto de perfil en TODAS las cuentas (afiliados + redes sociales).
+  </div>
+
+  <div class="alert naranja">
+    <strong>SI PIDEN INFORMACION QUE NO TIENES</strong>
+    No inventes nada. Anota en el documento que cuenta lo pide y que informacion necesita. Ejemplo: "Bybit pide direccion fisica" &mdash; y preguntale a Gerardo.
+  </div>
+
+  <hr>
+
+  <!-- ============================================ -->
+  <!-- PASO 1: HERRAMIENTAS AI -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2><span class="step-num">1</span> Herramientas de AI &mdash; 15 cuentas</h2>
+    <p class="section-desc">Entra a cada link, busca su programa de afiliados, y crea la cuenta con los datos de arriba.</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th style="width:28px"></th>
+          <th>Herramienta</th>
+          <th>Link para registrarse</th>
+          <th>Contrasena</th>
+          <th>Prioridad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Jasper</strong></td>
+          <td class="mono">partners.jasper.ai</td>
+          <td class="mono">Th3S1gnal!Jasp#26</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Writesonic</strong></td>
+          <td class="mono">writesonic.com/affiliates</td>
+          <td class="mono">Th3S1gnal!Wrsn#26</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Surfer SEO</strong></td>
+          <td class="mono">surferseo.com/affiliate</td>
+          <td class="mono">Th3S1gnal!Surf#26</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Semrush</strong></td>
+          <td class="mono">semrush.com/affiliate-program</td>
+          <td class="mono">Th3S1gnal!Semr#26</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Grammarly</strong></td>
+          <td class="mono">grammarly.com/affiliates</td>
+          <td class="mono">Th3S1gnal!Gram#26</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Canva Pro</strong></td>
+          <td class="mono">canva.com/affiliates</td>
+          <td class="mono">Th3S1gnal!Cnva#26</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Hostinger</strong></td>
+          <td class="mono">hostinger.com/affiliates</td>
+          <td class="mono">Th3S1gnal!Host#26</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Frase</strong></td>
+          <td class="mono">frase.io/affiliate</td>
+          <td class="mono">Th3S1gnal!Fras#26</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Copy.ai</strong></td>
+          <td class="mono">copy.ai/affiliates</td>
+          <td class="mono">Th3S1gnal!Copy#26</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>GetResponse</strong></td>
+          <td class="mono">getresponse.com/affiliate-program</td>
+          <td class="mono">Th3S1gnal!GtRs#26</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Synthesia</strong></td>
+          <td class="mono">synthesia.io/affiliates</td>
+          <td class="mono">Th3S1gnal!Synt#26</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Make</strong></td>
+          <td class="mono">make.com/en/affiliate</td>
+          <td class="mono">Th3S1gnal!Make#26</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>ClickUp</strong></td>
+          <td class="mono">clickup.com/partners</td>
+          <td class="mono">Th3S1gnal!ClUp#26</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Monday.com</strong></td>
+          <td class="mono">monday.com/affiliate-program</td>
+          <td class="mono">Th3S1gnal!Mndy#26</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Descript</strong></td>
+          <td class="mono">descript.com/affiliates</td>
+          <td class="mono">Th3S1gnal!Desc#26</td>
+          <td><span class="prioridad baja">Baja</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- ============================================ -->
+  <!-- PASO 2: CRYPTO EXCHANGES -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2><span class="step-num">2</span> Crypto Exchanges &mdash; 8 cuentas</h2>
+    <p class="section-desc">Estos son exchanges de criptomonedas. Cada uno tiene su propio programa de afiliados.</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th style="width:28px"></th>
+          <th>Exchange</th>
+          <th>Link para registrarse</th>
+          <th>Contrasena</th>
+          <th>Comision</th>
+          <th>Prioridad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Bybit</strong></td>
+          <td class="mono">affiliates.bybit.com</td>
+          <td class="mono">Th3S1gnal!Bybt#26</td>
+          <td>30-50% de por vida</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>KuCoin</strong></td>
+          <td class="mono">kucoin.com/affiliate</td>
+          <td class="mono">Th3S1gnal!KuCn#26</td>
+          <td>40-60% de por vida</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Coinbase</strong></td>
+          <td class="mono">coinbase.com/affiliates</td>
+          <td class="mono">Th3S1gnal!Cnbs#26</td>
+          <td>50% por 3 meses</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Crypto.com</strong></td>
+          <td class="mono">crypto.com/affiliate</td>
+          <td class="mono">Th3S1gnal!CrCm#26</td>
+          <td>Hasta $1,050 + 50%</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>OKX</strong></td>
+          <td class="mono">okx.com/campaigns/affiliate-hub</td>
+          <td class="mono">Th3S1gnal!OKXx#26</td>
+          <td>30-50% de por vida</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Kraken</strong></td>
+          <td class="mono">kraken.com/features/affiliate-program</td>
+          <td class="mono">Th3S1gnal!Krkn#26</td>
+          <td>20% de por vida</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Binance</strong></td>
+          <td class="mono">binance.com/en/activity/affiliate</td>
+          <td class="mono">Th3S1gnal!Bnnc#26</td>
+          <td>41-50% de por vida</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Gemini</strong></td>
+          <td class="mono">gemini.com/partners/affiliate</td>
+          <td class="mono">Th3S1gnal!Gmni#26</td>
+          <td>$25-$45 por venta</td>
+          <td><span class="prioridad baja">Baja</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- ============================================ -->
+  <!-- PASO 3: SPORTSBOOKS -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2><span class="step-num">3</span> Apuestas Deportivas &mdash; 6 cuentas</h2>
+    <p class="section-desc">Casas de apuestas que aceptan criptomonedas. Cada una tiene programa de afiliados.</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th style="width:28px"></th>
+          <th>Sportsbook</th>
+          <th>Link para registrarse</th>
+          <th>Contrasena</th>
+          <th>Comision</th>
+          <th>Prioridad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Bovada</strong></td>
+          <td class="mono">bovada.lv/new-bovada-affiliate-program</td>
+          <td class="mono">Th3S1gnal!Bvda#26</td>
+          <td>25-45% de por vida</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>BC.Game</strong></td>
+          <td class="mono">bc.game/affiliate</td>
+          <td class="mono">Th3S1gnal!BCGm#26</td>
+          <td>25-50% de por vida</td>
+          <td><span class="prioridad alta">Alta</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Stake.com</strong></td>
+          <td class="mono">stake.com/affiliate/overview</td>
+          <td class="mono">Th3S1gnal!Stak#26</td>
+          <td>10-45% de por vida</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>BetOnline</strong></td>
+          <td class="mono">commissionkings.ag</td>
+          <td class="mono">Th3S1gnal!BtOn#26</td>
+          <td>20-40%</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Jackbit</strong></td>
+          <td class="mono">jackbit.com/en/static/affiliate</td>
+          <td class="mono">Th3S1gnal!Jkbt#26</td>
+          <td>Hasta 50%</td>
+          <td><span class="prioridad media">Media</span></td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Cloudbet</strong></td>
+          <td class="mono">cloudbet.com/en/affiliates</td>
+          <td class="mono">Th3S1gnal!Cldb#26</td>
+          <td>25%</td>
+          <td><span class="prioridad baja">Baja</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- ============================================ -->
+  <!-- PASO 4: HARDWARE WALLETS -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2><span class="step-num">4</span> Hardware Wallets &mdash; 2 cuentas</h2>
+    <p class="section-desc">Billeteras fisicas de criptomonedas. Pagan comision por cada venta.</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th style="width:28px"></th>
+          <th>Producto</th>
+          <th>Link para registrarse</th>
+          <th>Contrasena</th>
+          <th>Comision</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Ledger</strong></td>
+          <td class="mono">affiliate.ledger.com</td>
+          <td class="mono">Th3S1gnal!Ldgr#26</td>
+          <td>10% por venta</td>
+        </tr>
+        <tr>
+          <td><span class="checkbox" style="width:16px;height:16px;"></span></td>
+          <td><strong>Trezor</strong></td>
+          <td class="mono">partners.trezor.io</td>
+          <td class="mono">Th3S1gnal!Trzr#26</td>
+          <td>12-15% por venta</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ============================================ -->
+  <!-- PASO 5: REDES SOCIALES -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2><span class="step-num">5</span> Redes Sociales &mdash; 3 cuentas</h2>
+    <p class="section-desc">Si estas cuentas no existen todavia, crearlas. Usar el logo como foto de perfil (pedirlo a Gerardo).</p>
+
+    <ul class="checklist">
+      <li>
+        <span class="checkbox"></span>
+        <span class="task-text">
+          <strong>Instagram</strong> &mdash; @thesignalai<br>
+          <span class="url">https://www.instagram.com</span>
+          Contrasena: <span class="pw">Th3S1gnal!Inst#26</span><br>
+          <span class="nota">Tipo de cuenta: Negocio. Bio: "Independent AI, Crypto & Sports Betting Reviews | thesignal.blog"</span>
+        </span>
+      </li>
+      <li>
+        <span class="checkbox"></span>
+        <span class="task-text">
+          <strong>X (Twitter)</strong> &mdash; @thesignalai<br>
+          <span class="url">https://x.com/i/flow/signup</span>
+          Contrasena: <span class="pw">Th3S1gnal!Xtwt#26</span><br>
+          <span class="nota">Bio: "Cut through the noise. Independent reviews: AI tools, crypto, sports betting. thesignal.blog"</span>
+        </span>
+      </li>
+      <li>
+        <span class="checkbox"></span>
+        <span class="task-text">
+          <strong>LinkedIn</strong> &mdash; Pagina de empresa: The Signal AI<br>
+          <span class="url">https://www.linkedin.com/company/setup/new/</span>
+          Contrasena: <span class="pw">Th3S1gnal!Lnkd#26</span><br>
+          <span class="nota">Industria: "Online Media". Descripcion: "Independent publication covering AI tools, crypto exchanges, and sports betting."</span>
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <hr>
+
+  <!-- ============================================ -->
+  <!-- PASO 6: AL TERMINAR -->
+  <!-- ============================================ -->
+  <div class="section">
+    <h2><span class="step-num">6</span> Cuando termines todo</h2>
+    <p class="section-desc">Estas son las tareas finales. Hacerlas DESPUES de crear todas las cuentas.</p>
+
+    <ul class="checklist">
+      <li>
+        <span class="checkbox"></span>
+        <span class="task-text">
+          <strong>Crear un Google Sheet con TODAS las cuentas</strong><br>
+          <span class="nota">Columnas: Plataforma | URL | Email | Username | Contrasena | Estado | Link de Afiliado | Notas</span>
+        </span>
+      </li>
+      <li>
+        <span class="checkbox"></span>
+        <span class="task-text">
+          <strong>Copiar el link de afiliado de cada cuenta aprobada</strong><br>
+          <span class="nota">Cuando una cuenta es aprobada, te dan un link unico de afiliado. Copiarlo en la columna "Link de Afiliado".</span>
+        </span>
+      </li>
+      <li>
+        <span class="checkbox"></span>
+        <span class="task-text">
+          <strong>Verificar TODOS los emails de confirmacion</strong><br>
+          <span class="nota">Entrar a beatsfreeflow@gmail.com y confirmar cada email de verificacion que llegue.</span>
+        </span>
+      </li>
+      <li>
+        <span class="checkbox"></span>
+        <span class="task-text">
+          <strong>Subir el logo en TODAS las cuentas</strong><br>
+          <span class="nota">Pedirle el archivo a Gerardo. Subirlo como foto de perfil o logo de empresa en cada plataforma y cada red social.</span>
+        </span>
+      </li>
+      <li>
+        <span class="checkbox"></span>
+        <span class="task-text">
+          <strong>Marcar el estado de cada cuenta en el Google Sheet</strong><br>
+          <span class="nota">Opciones: <strong>Aprobado</strong> | <strong>Pendiente</strong> (esperando aprobacion) | <strong>Rechazado</strong> | <strong>Necesita Info</strong> (preguntarle a Gerardo)</span>
+        </span>
+      </li>
+    </ul>
+  </div>
+
+  <hr>
+
+  <!-- ===== EJEMPLO DEL GOOGLE SHEET ===== -->
+  <div class="section">
+    <h2 style="margin-bottom: 14px;">Ejemplo del Google Sheet</h2>
+    <p class="section-desc" style="padding-left: 0;">Asi debe verse el documento final. Una fila por cada cuenta.</p>
+
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Plataforma</th>
+          <th>Email</th>
+          <th>Username</th>
+          <th>Contrasena</th>
+          <th>Estado</th>
+          <th>Link de Afiliado</th>
+          <th>Notas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Jasper</strong></td>
+          <td class="mono" style="font-size:10pt">beatsfreeflow@gmail.com</td>
+          <td class="mono">thesignalai</td>
+          <td class="mono">Th3S1gnal!Jasp#26</td>
+          <td><span class="prioridad alta">Aprobado</span></td>
+          <td class="mono" style="font-size:10pt">jasper.ai/?ref=xxxx</td>
+          <td>-</td>
+        </tr>
+        <tr>
+          <td><strong>Bybit</strong></td>
+          <td class="mono" style="font-size:10pt">beatsfreeflow@gmail.com</td>
+          <td class="mono">thesignalai</td>
+          <td class="mono">Th3S1gnal!Bybt#26</td>
+          <td><span class="prioridad media">Pendiente</span></td>
+          <td class="mono" style="font-size:10pt">-</td>
+          <td>Esperando revision</td>
+        </tr>
+        <tr>
+          <td><strong>Bovada</strong></td>
+          <td class="mono" style="font-size:10pt">beatsfreeflow@gmail.com</td>
+          <td class="mono">thesignalai</td>
+          <td class="mono">Th3S1gnal!Bvda#26</td>
+          <td><span class="prioridad baja">Necesita Info</span></td>
+          <td class="mono" style="font-size:10pt">-</td>
+          <td>Pide direccion fisica</td>
+        </tr>
+        <tr>
+          <td colspan="7" style="text-align:center; color:#aaa; font-style:italic; padding: 10px;">...una fila por cada cuenta (34 cuentas en total)...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <!-- ===== RESUMEN ===== -->
+  <div class="info-box" style="border-color: #0B0F19;">
+    <h3>Resumen &mdash; Total de cuentas</h3>
+    <div class="info-row">
+      <span class="info-label">Herramientas AI:</span>
+      <span class="info-value" style="font-family: Inter, sans-serif; font-weight: 700;">15</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Crypto exchanges:</span>
+      <span class="info-value" style="font-family: Inter, sans-serif; font-weight: 700;">8</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Apuestas deportivas:</span>
+      <span class="info-value" style="font-family: Inter, sans-serif; font-weight: 700;">6</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Hardware wallets:</span>
+      <span class="info-value" style="font-family: Inter, sans-serif; font-weight: 700;">2</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Redes sociales:</span>
+      <span class="info-value" style="font-family: Inter, sans-serif; font-weight: 700;">3</span>
+    </div>
+    <div class="info-row" style="border-top: 3px solid #0B0F19; padding-top: 10px; margin-top: 6px;">
+      <span class="info-label" style="font-size: 15pt;"><strong>TOTAL:</strong></span>
+      <span class="info-value" style="font-size: 15pt; font-family: Inter, sans-serif;"><strong>34 cuentas</strong></span>
+    </div>
+  </div>
+
+  <div class="alert verde">
+    <strong>ORDEN: Empezar por las de prioridad ALTA</strong>
+    Las cuentas marcadas <span class="prioridad alta" style="display:inline;">Alta</span> son las que generan mas dinero. Empezar por esas. Luego <span class="prioridad media" style="display:inline;">Media</span> y al final <span class="prioridad baja" style="display:inline;">Baja</span>.
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <p><strong>The Signal AI</strong> &bull; Documento interno &bull; Febrero 2026</p>
+    <p>Dudas? Preguntarle a Gerardo antes de inventar informacion.</p>
+  </div>
+
+</body>
+</html>

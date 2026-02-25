@@ -1,0 +1,9 @@
+# Cloudflare Pages redirects
+# Trailing slash normalization for category pages
+/ai-tools  /ai-tools/  301
+/crypto  /crypto/  301
+/sports-betting  /sports-betting/  301
+
+# Common typos / old URLs
+/blog  /  301
+/articles  /  301
