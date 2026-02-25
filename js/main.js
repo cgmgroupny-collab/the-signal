@@ -85,18 +85,28 @@
   resize();
   window.addEventListener('resize', resize);
 
-  /* Particles */
+  /* Particles — more, brighter, multi-color */
   var particles = [];
-  var particleCount = Math.min(60, Math.floor(w / 20));
+  var particleCount = Math.min(90, Math.floor(w / 14));
+  var colors = [
+    [0, 212, 170],   /* teal */
+    [59, 130, 246],   /* blue */
+    [255, 77, 0],     /* orange */
+    [0, 255, 208],    /* bright mint */
+    [130, 100, 255],  /* purple */
+  ];
 
   function createParticle() {
+    var c = colors[Math.floor(Math.random() * colors.length)];
     return {
       x: Math.random() * w,
       y: Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      r: Math.random() * 1.5 + 0.5,
-      opacity: Math.random() * 0.3 + 0.1
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      r: Math.random() * 2.5 + 0.8,
+      opacity: Math.random() * 0.5 + 0.15,
+      color: c,
+      pulse: Math.random() * Math.PI * 2
     };
   }
 
@@ -104,25 +114,28 @@
     particles.push(createParticle());
   }
 
-  /* Waveform config */
+  /* Waveform config — brighter, more visible */
   var time = 0;
   var waves = [
-    { amp: 40, freq: 0.008, speed: 0.015, color: 'rgba(0, 212, 170, 0.12)', width: 2 },
-    { amp: 25, freq: 0.012, speed: 0.02,  color: 'rgba(0, 212, 170, 0.08)', width: 1.5 },
-    { amp: 60, freq: 0.005, speed: 0.01,  color: 'rgba(59, 130, 246, 0.06)', width: 1 },
-    { amp: 15, freq: 0.02,  speed: 0.025, color: 'rgba(255, 77, 0, 0.05)',  width: 1 },
+    { amp: 50, freq: 0.008, speed: 0.015, color: 'rgba(0, 212, 170, 0.25)', width: 2.5 },
+    { amp: 30, freq: 0.012, speed: 0.02,  color: 'rgba(0, 255, 208, 0.15)', width: 2 },
+    { amp: 70, freq: 0.005, speed: 0.01,  color: 'rgba(59, 130, 246, 0.12)', width: 1.5 },
+    { amp: 20, freq: 0.02,  speed: 0.025, color: 'rgba(255, 77, 0, 0.10)',  width: 1.5 },
+    { amp: 35, freq: 0.015, speed: 0.018, color: 'rgba(130, 100, 255, 0.08)', width: 1 },
   ];
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
     time += 1;
 
-    /* Draw waves */
+    /* Draw glowing waves */
     var midY = h * 0.55;
     waves.forEach(function (wave) {
       ctx.beginPath();
       ctx.strokeStyle = wave.color;
       ctx.lineWidth = wave.width;
+      ctx.shadowColor = wave.color.replace(/[\d.]+\)$/, '0.4)');
+      ctx.shadowBlur = 12;
       for (var x = 0; x < w; x += 2) {
         var y = midY + Math.sin(x * wave.freq + time * wave.speed) * wave.amp
                      + Math.sin(x * wave.freq * 1.5 + time * wave.speed * 0.7) * wave.amp * 0.3;
@@ -131,19 +144,31 @@
       }
       ctx.stroke();
     });
+    ctx.shadowBlur = 0;
 
-    /* Draw particles */
+    /* Draw particles with glow and pulse */
     particles.forEach(function (p) {
       p.x += p.vx;
       p.y += p.vy;
+      p.pulse += 0.02;
       if (p.x < 0) p.x = w;
       if (p.x > w) p.x = 0;
       if (p.y < 0) p.y = h;
       if (p.y > h) p.y = 0;
 
+      var pulseR = p.r + Math.sin(p.pulse) * 0.5;
+      var pulseO = p.opacity + Math.sin(p.pulse) * 0.1;
+
+      /* Outer glow */
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(0, 212, 170, ' + p.opacity + ')';
+      ctx.arc(p.x, p.y, pulseR * 3, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + p.color[0] + ',' + p.color[1] + ',' + p.color[2] + ',' + (pulseO * 0.15) + ')';
+      ctx.fill();
+
+      /* Core dot */
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, pulseR, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + p.color[0] + ',' + p.color[1] + ',' + p.color[2] + ',' + pulseO + ')';
       ctx.fill();
     });
 
@@ -153,10 +178,12 @@
         var dx = particles[i].x - particles[j].x;
         var dy = particles[i].y - particles[j].y;
         var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
+        if (dist < 150) {
+          var alpha = 0.12 * (1 - dist / 150);
+          var c = particles[i].color;
           ctx.beginPath();
-          ctx.strokeStyle = 'rgba(0, 212, 170, ' + (0.04 * (1 - dist / 120)) + ')';
-          ctx.lineWidth = 0.5;
+          ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + alpha + ')';
+          ctx.lineWidth = 0.8;
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
           ctx.stroke();
