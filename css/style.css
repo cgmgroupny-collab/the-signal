@@ -172,11 +172,11 @@ strong { font-weight: 600; }
 .logo-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 32px;
+  gap: 10px;
+  padding: 0 36px;
   white-space: nowrap;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.45);
   letter-spacing: 0.05em;
@@ -189,8 +189,8 @@ strong { font-weight: 600; }
 }
 
 .logo-item .dot {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--color-teal);
   opacity: 0.6;
@@ -198,8 +198,8 @@ strong { font-weight: 600; }
 }
 
 .brand-icon {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
   color: var(--color-teal);
   opacity: 0.5;
@@ -476,16 +476,16 @@ strong { font-weight: 600; }
 
 @keyframes textFlicker {
   0%, 92%, 100% { opacity: 1; }
-  93% { opacity: 0.3; }
+  93% { opacity: 0.6; }
   94% { opacity: 1; }
-  96% { opacity: 0.5; }
+  96% { opacity: 0.7; }
   97% { opacity: 1; }
 }
 
 .hero-subtitle {
   font-family: var(--font-body);
   font-size: clamp(1rem, 2.5vw, 1.1875rem);
-  color: var(--color-text-muted-dark);
+  color: rgba(255, 255, 255, 0.75);
   max-width: 540px;
   margin: 0 auto var(--space-2xl);
   line-height: 1.6;
@@ -516,7 +516,7 @@ strong { font-weight: 600; }
 .hero-stat-label {
   font-family: var(--font-mono);
   font-size: 0.625rem;
-  color: var(--color-text-muted-dark);
+  color: rgba(255, 255, 255, 0.55);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
