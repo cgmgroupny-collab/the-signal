@@ -24,6 +24,14 @@
   }
 
   /* --- Newsletter Form Enhancement --- */
+  /* Auto-tag subscribers by section so you can segment in Buttondown */
+  var path = window.location.pathname;
+  var subscriberTag = 'homepage';
+  if (path.indexOf('/ai-tools/') !== -1) subscriberTag = 'ai-tools';
+  else if (path.indexOf('/crypto/') !== -1) subscriberTag = 'crypto';
+  else if (path.indexOf('/sports-betting/') !== -1) subscriberTag = 'sports-betting';
+  else if (path.indexOf('/about') !== -1) subscriberTag = 'about';
+
   document.querySelectorAll('.newsletter-form').forEach(function (form) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -37,8 +45,9 @@
       fetch(form.action, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'email=' + encodeURIComponent(email)
-      }).then(function () {
+        body: 'email=' + encodeURIComponent(email) + '&tag=' + encodeURIComponent(subscriberTag) + '&referrer_url=' + encodeURIComponent(window.location.href)
+      }).then(function (res) {
+        if (!res.ok) throw new Error('Subscribe failed');
         input.value = '';
         btn.textContent = 'Subscribed!';
         btn.style.background = '#00D4AA';
